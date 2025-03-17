@@ -1,4 +1,5 @@
 /__pycache__/
 /venv/
+/media/
 /core/__pycache__/
 db.sqlite3
