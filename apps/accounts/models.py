@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
-
+from apps.accounts.managers import CustomUserManager
 
 ACCOUNT_TYPE_CHOICES = (
     ("SUPERUSER", "SUPERUSER"),
@@ -27,10 +27,16 @@ class User(AbstractBaseUser):
     first_name = models.CharField(verbose_name="First name", max_length=30)
     last_name = models.CharField(verbose_name="Last name", max_length=40)
     email = models.EmailField(verbose_name="E-mail", unique=True)
+    is_active = models.BooleanField(default=True)
     role = models.CharField(max_length=9, choices=ACCOUNT_TYPE_CHOICES, default="RESP")
     avatar = models.ImageField(
         upload_to="avatars/", null=True, default="avatars/default.jpg"
     )
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["first_name", "last_name"]
+
+    objects = CustomUserManager()
 
     @property
     def full_name(self):
