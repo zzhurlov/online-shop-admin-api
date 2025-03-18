@@ -138,3 +138,14 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MEDIA_URL = "/media/"  # URL по которому будут доступны медиафайлы
 MEDIA_ROOT = BASE_DIR / "media"  # Папка для хранения загружаемых файлов
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Admin Panel API",  # название проекта
+    "VERSION": "1.0v",  # версия проекта
+    "SERVE_INCLUDE_SCHEMA": False,  # исключить эндпоинт /schema
+}
