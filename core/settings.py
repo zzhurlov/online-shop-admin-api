@@ -142,10 +142,22 @@ MEDIA_ROOT = BASE_DIR / "media"  # Папка для хранения загру
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.SessionAuthentication",  # Аутентификация через сессии
+    ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",  # Доступ только для аутентифицированных пользователей
+    ),
 }
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Admin Panel API",  # название проекта
     "VERSION": "1.0v",  # версия проекта
     "SERVE_INCLUDE_SCHEMA": False,  # исключить эндпоинт /schema
+    "AUTHENTICATION_CLASSES": [
+        "drf_spectacular.authentication.SessionScheme",
+    ],
 }
+
+
+AUTH_USER_MODEL = "accounts.User"

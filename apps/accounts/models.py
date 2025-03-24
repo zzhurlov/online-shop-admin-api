@@ -28,6 +28,7 @@ class User(AbstractBaseUser):
     last_name = models.CharField(verbose_name="Last name", max_length=40)
     email = models.EmailField(verbose_name="E-mail", unique=True)
     is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=True)
     role = models.CharField(max_length=9, choices=ACCOUNT_TYPE_CHOICES, default="RESP")
     avatar = models.ImageField(
         upload_to="avatars/", null=True, default="avatars/default.jpg"
@@ -44,3 +45,9 @@ class User(AbstractBaseUser):
 
     def __str__(self):
         return self.full_name
+
+    def has_perm(self, perm, obj=None):
+        return True
+
+    def has_module_perms(self, app_label):
+        return True
