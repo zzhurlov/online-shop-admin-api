@@ -12,3 +12,14 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         exclude = ["password"]
+
+
+class ResponsibleSerializer(serializers.ModelSerializer):
+    """
+    This serializer needs for serialization
+    responsibles of shops at /shops/ endpoint
+    """
+
+    class Meta:
+        model = User
+        exclude = ["last_login", "password", "is_staff", "avatar"]

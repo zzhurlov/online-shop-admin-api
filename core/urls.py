@@ -28,4 +28,5 @@ urlpatterns = [
         name="swagger-ui",
     ),
     path("accounts/", include("apps.accounts.urls")),
+    path("shops/", include("apps.shop.urls")),
 ]

@@ -5,7 +5,6 @@ from rest_framework import permissions
 from apps.accounts.permissions import IsSuperUser
 from apps.accounts.serializers import CreateUserSerializer, ProfileSerializer
 from apps.accounts.models import User
-from apps.accounts.utils import set_dict_attr
 
 from drf_spectacular.utils import extend_schema
 
@@ -48,14 +47,23 @@ class ProfileAPIView(APIView):
             user = None
         return user
 
+    @extend_schema(
+        operation_id="getting_profiles_by_email",
+        summary="Retrieve the profiles",
+        description="This endpoint allows superuser to retrieve profile",
+    )
     def get(self, request, *args, **kwargs):
         user = self.get_object(kwargs["email"])
 
         if user is not None:
             serializer = self.serializer_class(user)
             return Response(data=serializer.data, status=200)
-        return Response(data={"message": "This User does not exist!"})
+        return Response(data={"message": "This User does not exist!"}, status=404)
 
+    @extend_schema(
+        summary="Change the profiles of users",
+        description="This endpoint allows superuser to change the profile of user",
+    )
     def patch(self, request, *args, **kwargs):
         user = self.get_object(kwargs["email"])
 
@@ -67,21 +75,30 @@ class ProfileAPIView(APIView):
                 return Response(data=serializer.data, status=200)
             return Response(data={"message": "Error, Check your details!"}, status=400)
 
-        return Response(data={"message": "This user does not exist!"})
+        return Response(data={"message": "This user does not exist!"}, status=404)
 
+    @extend_schema(
+        summary="Delete the profiles of users",
+        description="This endpoint allows superuser to delete the profile of user",
+    )
     def delete(self, request, *args, **kwargs):
         user = self.get_object(kwargs["email"])
 
         if user is not None:
             user.delete()
             return Response(data={"message": "This user has deleted successfully!"})
-        return Response(data={"message": "This user does not exist!"})
+        return Response(data={"message": "This user does not exist!"}, status=404)
 
 
 class ProfilesAPIView(APIView):
     serializer_class = ProfileSerializer
     permission_classes = [IsSuperUser]
 
+    @extend_schema(
+        operation_id="getting_profiles",
+        summary="Retrieve the profiles",
+        description="This endpoint allows superuser to retrieve the profiles of users",
+    )
     def get(self, request):
         users = User.objects.all()
         serializer = self.serializer_class(users, many=True)
@@ -92,11 +109,19 @@ class MyProfileAPIView(APIView):
     serializer_class = ProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        summary="Get your own profile",
+        description="This endpoint allows user to get their own profile",
+    )
     def get(self, request):
         user = request.user
         serializer = self.serializer_class(user)
         return Response(data=serializer.data, status=200)
 
+    @extend_schema(
+        summary="Change your own profile",
+        description="This endpoint allows user to get their own profile",
+    )
     def patch(self, request):
         user = request.user
 

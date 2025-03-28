@@ -21,7 +21,7 @@ class Shop(models.Model):
     desc = models.TextField(max_length=1000)
     responsible_id = models.ManyToManyField(User)
     is_active = models.BooleanField(default=True)
-    image = models.ImageField(upload_to="shops_images/")
+    image = models.ImageField(upload_to="shops_images/", null=True)
 
     def __str__(self):
         return f"{self.title}"
