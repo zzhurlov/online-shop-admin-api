@@ -19,7 +19,7 @@ class Product(models.Model):
 
     title = models.CharField(max_length=50, unique=True)
     desc = models.TextField(max_length=1000)
-    image = models.ImageField(upload_to="products_images/")
+    image = models.ImageField(upload_to="products_images/", null=True)
     shops = models.ManyToManyField(Shop, through="ShopProduct", related_name="shops")
 
     def __str__(self):
@@ -37,8 +37,12 @@ class ShopProduct(models.Model):
         in_stock (int): the quantity of the products in the corresponding shop
     """
 
-    shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    shop = models.ForeignKey(
+        Shop, on_delete=models.CASCADE, related_name="shopproducts"
+    )
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="shopproducts"
+    )
     price = models.DecimalField(max_digits=10, decimal_places=2)
     in_stock = models.PositiveIntegerField()
 
