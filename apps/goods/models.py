@@ -53,8 +53,16 @@ class Category(models.Model):
 
     Attributes:
         title (str): The title of the category
+        parent (FK): A self-referential foreign key for category hierarchy
         products (FK): Many to Many relation to Product model
     """
 
     title = models.CharField(max_length=30)
+    parent = models.ForeignKey(
+        "self",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="subcategories",
+    )
     products = models.ManyToManyField(Product, related_name="categories")

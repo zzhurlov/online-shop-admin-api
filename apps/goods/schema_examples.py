@@ -20,3 +20,18 @@ PRODUCT_PARAM_EXAMPLE = [
         type=OpenApiTypes.INT,
     ),
 ]
+
+
+CATEGORY_PARAM_EXAMPLE = [
+    OpenApiParameter(
+        name="title",
+        description="Get a categories by title",
+        required=False,
+        type=OpenApiTypes.STR,
+    ),
+    OpenApiParameter(
+        name="parent_title",
+        description="Get a category by parent category title",
+        type=OpenApiTypes.STR,
+    ),
+]

@@ -29,5 +29,5 @@ urlpatterns = [
     ),
     path("accounts/", include("apps.accounts.urls")),
     path("shops/", include("apps.shop.urls")),
-    path("products/", include("apps.goods.urls")),
+    path("", include("apps.goods.urls")),
 ]

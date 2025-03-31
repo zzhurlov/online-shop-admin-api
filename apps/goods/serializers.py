@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.goods.models import ShopProduct, Product
+from apps.goods.models import ShopProduct, Product, Category
 from apps.shop.serializers import ShopSerializer
 
 
@@ -37,3 +37,9 @@ class ShopProductSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = "__all__"
