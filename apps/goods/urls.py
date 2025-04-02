@@ -1,6 +1,11 @@
 from django.urls import path
 
-from apps.goods.views import ProductsAPIView, ProductAPIView, CategoriesAPIView
+from apps.goods.views import (
+    ProductsAPIView,
+    ProductAPIView,
+    CategoriesAPIView,
+    CategoryAPIView,
+)
 
 
 urlpatterns = [
@@ -11,4 +16,5 @@ urlpatterns = [
         CategoriesAPIView.as_view(),
         name="categories",
     ),
+    path("categories/<int:id>/", CategoryAPIView.as_view(), name="category"),
 ]

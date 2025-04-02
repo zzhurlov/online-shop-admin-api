@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.goods.models import ShopProduct, Product, Category
+from apps.shop.models import Shop
 from apps.shop.serializers import ShopSerializer
 
 
@@ -39,7 +40,35 @@ class ShopProductSerializer(serializers.ModelSerializer):
         return instance
 
 
+class CreateShopProductSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
+    shop = serializers.PrimaryKeyRelatedField(
+        queryset=Shop.objects.all(), write_only=True
+    )
+
+    class Meta:
+        model = ShopProduct
+        fields = "__all__"
+
+    def create(self, validated_data):
+        product_data = validated_data.pop("product")
+        shop_data = validated_data.pop("shop")
+
+        product = Product.objects.create(**product_data)
+
+        shopproduct = ShopProduct.objects.create(
+            shop=shop_data, product=product, **validated_data
+        )
+
+        return shopproduct
+
+
 class CategorySerializer(serializers.ModelSerializer):
+    full_path = serializers.SerializerMethodField()
+
     class Meta:
         model = Category
         fields = "__all__"
+
+    def get_full_path(self, obj):
+        return obj.get_full_path()

@@ -2,7 +2,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions
 
-from apps.goods.serializers import ShopProductSerializer, CategorySerializer
+from apps.goods.serializers import (
+    ShopProductSerializer,
+    CategorySerializer,
+    CreateShopProductSerializer,
+)
 from apps.goods.models import ShopProduct, Category
 from apps.goods.schema_examples import PRODUCT_PARAM_EXAMPLE, CATEGORY_PARAM_EXAMPLE
 from apps.goods.filters import CategoryFilter, ProductFilter
@@ -10,10 +14,14 @@ from apps.goods.filters import CategoryFilter, ProductFilter
 from drf_spectacular.utils import extend_schema
 
 
-# TODO: make the POST method for products
 class ProductsAPIView(APIView):
-    serializer_class = ShopProductSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return ShopProductSerializer
+        elif self.request.method == "POST":
+            return CreateShopProductSerializer
 
     @extend_schema(
         operation_id="filtering_products",
@@ -27,9 +35,28 @@ class ProductsAPIView(APIView):
         filterset = ProductFilter(request.query_params, queryset=products)
         if filterset.is_valid():
             queryset = filterset.qs
-            serializer = self.serializer_class(queryset, many=True)
+            serializer = self.get_serializer_class()(queryset, many=True)
             return Response(data=serializer.data, status=200)
         return Response(filterset.errors, status=400)
+
+    @extend_schema(
+        summary="Create the new product",
+        description="This endpoint allows user to create the new product",
+    )
+    def post(self, request):
+        serializer = self.get_serializer_class()(data=request.data)
+
+        if serializer.is_valid():
+            shopproduct = serializer.save()
+
+            serializer = self.get_serializer_class()(shopproduct)
+
+            return Response(data=serializer.data, status=200)
+
+        return Response(
+            data={"message": "Error, check your details!", "errors": serializer.errors},
+            status=400,
+        )
 
 
 class ProductAPIView(APIView):
@@ -84,6 +111,7 @@ class CategoriesAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     @extend_schema(
+        operation_id="get_categories_by_title_and_parent_title",
         summary="Retrieve the categories",
         description="This endpoint allows user to retrieve the categories",
         parameters=CATEGORY_PARAM_EXAMPLE,
@@ -96,6 +124,22 @@ class CategoriesAPIView(APIView):
             queryset = filterset.qs
             serializer = self.serializer_class(queryset, many=True)
         return Response(data=serializer.data, status=200)
+
+    @extend_schema(
+        summary="Create the new category",
+        description="This endpoint allows user to create the new category",
+    )
+    def post(self, reqeust):
+        serializer = self.serializer_class(data=reqeust.data)
+
+        if serializer.is_valid():
+            category = serializer.save()
+
+            serializer = self.serializer_class(category)
+
+            return Response(data=serializer.data, status=200)
+
+        return Response(data={"errors": serializer.errors})
 
 
 class CategoryAPIView(APIView):
@@ -110,6 +154,11 @@ class CategoryAPIView(APIView):
 
         return category
 
+    @extend_schema(
+        operation_id="get_category_by_id",
+        summary="Retrieve the category by id",
+        description="This endpoint allows user to retrieve the category by id",
+    )
     def get(self, request, *args, **kwargs):
         category = self.get_object(id=kwargs["id"])
 

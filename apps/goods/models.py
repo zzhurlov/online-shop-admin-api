@@ -66,3 +66,13 @@ class Category(models.Model):
         related_name="subcategories",
     )
     products = models.ManyToManyField(Product, related_name="categories")
+
+    def get_full_path(self):
+        path = []
+        category = self
+
+        while category:
+            path.append(category.title)
+            category = category.parent
+
+        return " > ".join(reversed(path))
