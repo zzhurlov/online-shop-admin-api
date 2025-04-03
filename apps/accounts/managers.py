@@ -40,7 +40,7 @@ class CustomUserManager(BaseUserManager):
     def validate_superuser(self, email, password, **extra_fields):
         extra_fields.setdefault("role", "SUPERUSER")
 
-        if extra_fields.get("role") is not True:
+        if extra_fields.get("role") != "SUPERUSER":
             raise ValueError("Superusers must have superuser role!")
 
         if not password:

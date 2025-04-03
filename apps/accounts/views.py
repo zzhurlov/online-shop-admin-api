@@ -27,7 +27,7 @@ class RegisterAPIView(APIView):
             new_user.save()
 
             return Response(
-                data={"message": "You've registered successfully!"}, status=200
+                data={"message": "You've registered successfully!"}, status=201
             )
 
         return Response(
@@ -86,7 +86,9 @@ class ProfileAPIView(APIView):
 
         if user is not None:
             user.delete()
-            return Response(data={"message": "This user has deleted successfully!"})
+            return Response(
+                data={"message": "This user has deleted successfully!"}, status=204
+            )
         return Response(data={"message": "This user does not exist!"}, status=404)
 
 
