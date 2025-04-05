@@ -9,9 +9,7 @@ from apps.shop.models import Shop
 from apps.accounts.models import User
 
 
-# МОДЕЛИ
-
-
+# Models
 class ProductModelTest(TestCase):
     def setUp(self):
         self.product = Product.objects.create(
@@ -35,9 +33,7 @@ class CategoryModelTest(TestCase):
         self.assertEqual(path, "Electronics > Phones")
 
 
-# СЕРИАЛИЗАТОРЫ
-
-
+# Serializers
 class ProductSerializerTest(TestCase):
     def test_product_serializer_data(self):
         product = Product.objects.create(title="Serialized Product", desc="Desc")
@@ -53,9 +49,7 @@ class CategorySerializerTest(TestCase):
         self.assertEqual(serializer.data["full_path"], "Books > Fiction")
 
 
-# VIEW (API Тесты)
-
-
+# Views
 class GoodsAPITest(APITestCase):
     def setUp(self):
         self.user = User.objects.create_responsible(
