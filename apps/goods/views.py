@@ -129,8 +129,8 @@ class CategoriesAPIView(APIView):
         summary="Create the new category",
         description="This endpoint allows user to create the new category",
     )
-    def post(self, reqeust):
-        serializer = self.serializer_class(data=reqeust.data)
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
             category = serializer.save()

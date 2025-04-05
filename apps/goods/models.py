@@ -55,6 +55,9 @@ class Category(models.Model):
         title (str): The title of the category
         parent (FK): A self-referential foreign key for category hierarchy
         products (FK): Many to Many relation to Product model
+
+    Methods:
+        __str__(): Returns the title of the category
     """
 
     title = models.CharField(max_length=30)
@@ -66,6 +69,9 @@ class Category(models.Model):
         related_name="subcategories",
     )
     products = models.ManyToManyField(Product, related_name="categories")
+
+    def __str__(self):
+        return f"{self.title}"
 
     def get_full_path(self):
         path = []

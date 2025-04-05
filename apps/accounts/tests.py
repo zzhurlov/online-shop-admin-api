@@ -1,8 +1,6 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
 
-from django.contrib.auth.hashers import make_password
-
 from apps.accounts.models import User
 from apps.accounts.serializers import (
     CreateUserSerializer,
