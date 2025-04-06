@@ -1,6 +1,6 @@
 # Online Shop Administration API
 
-Тестовое [задание](https://github.com/Hexlet/ru-test-assignments/blob/main/backend/Python/KazanExpress/README.md) от KazanExpress
+Тестовое [задание](https://github.com/Hexlet/ru-test-assignments/blob/main/backend/Python/KazanExpress/README.md) от KazanExpress на Backend Python Developer
 
 # Стек технологий:
 
